@@ -10,10 +10,63 @@
     <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
     <!-- Bootstrap + JohnDoe main styles -->
 	<link rel="stylesheet" href="assets/css/johndoe.css">
+	<style>
+			.header {
+					position: relative;
+					height: 30vh;
+					min-height: 600px;
+					overflow: hidden;
+					color: #fff;
+			}
+
+			.header-background {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-size: cover;
+					background-position: center;
+					background-repeat: no-repeat;
+					background-attachment: fixed;
+					transition: opacity 1.5s ease-in-out;
+			}
+			.header-background::before {
+			    content: "";
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    width: 100%;
+			    height: 100%;
+			    background: rgba(0, 0, 0, 0.5); /* This is the dark overlay */
+			    z-index: 1;
+			}
+			.header-background.next {
+					opacity: 0;
+					z-index: 1;
+			}
+
+			.header-background.current {
+					opacity: 1;
+					z-index: 0;
+			}
+
+			.header-content {
+					position: relative;
+					z-index: 2;
+			}
+	</style>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
-    <a href="components.html" class="btn btn-primary btn-component" data-spy="affix" data-offset-top="600"><i class="ti-shift-left-alt"></i> Components</a>
+    <a href="components.html" class="btn btn-primary btn-component" data-spy="affix" data-offset-top="600">
+        <i class="ti-shift-left-alt"></i> Components
+    </a>
+
     <header class="header">
+        <!-- Background layers -->
+        <div class="header-background current"></div>
+        <div class="header-background next"></div>
+
         <div class="container">
             <ul class="social-icons pt-3">
                 <li class="social-item"><a class="social-link text-light" href="#"><i class="ti-facebook" aria-hidden="true"></i></a></li>
@@ -23,14 +76,52 @@
                 <li class="social-item"><a class="social-link text-light" href="#"><i class="ti-github" aria-hidden="true"></i></a></li>
             </ul>
             <div class="header-content">
-                <h4 class="header-subtitle" >Hello, I am</h4>
+                <h4 class="header-subtitle">Hello, I am</h4>
                 <h1 class="header-title">Sébastien Martinet</h1>
-                <h6 class="header-mono" >PhD in Astrophysics | Researcher</h6>
-                <button class="btn btn-primary btn-rounded"><i class="ti-printer pr-2"></i>Print Resume</button>
+                <h6 class="header-mono">PhD in Astrophysics | Researcher</h6>
+                <button class="btn btn-primary btn-rounded">
+                    <i class="ti-printer pr-2"></i>Print Resume
+                </button>
             </div>
         </div>
     </header>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white" data-spy="affix" data-offset-top="510">
+		<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = [
+                'assets/imgs/header_crop.png',
+                'assets/imgs/Table_Uranium.png',
+                'assets/imgs/dome_picture_kids.png'
+            ];
+            let currentIndex = 0;
+
+            const currentBg = document.querySelector('.header-background.current');
+            const nextBg = document.querySelector('.header-background.next');
+
+            // Set the initial images
+            currentBg.style.backgroundImage = `url(${images[currentIndex]})`;
+            nextBg.style.backgroundImage = `url(${images[(currentIndex + 1) % images.length]})`;
+
+            function changeBackgroundImage() {
+                currentIndex = (currentIndex + 1) % images.length;
+
+                // Swap the images
+                nextBg.style.backgroundImage = `url(${images[currentIndex]})`;
+
+                // Fade out the current image and fade in the next image
+                currentBg.classList.remove('current');
+                currentBg.classList.add('next');
+                nextBg.classList.remove('next');
+                nextBg.classList.add('current');
+
+                // Swap the references
+                [currentBg, nextBg] = [nextBg, currentBg];
+            }
+
+            // Change image every 5 seconds
+            setInterval(changeBackgroundImage, 5000);
+        });
+    </script>
+		    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white" data-spy="affix" data-offset-top="510">
         <div class="container">
             <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -73,7 +164,7 @@
             <div class="col-lg-4 about-card">
                 <h3 class="font-weight-light">Who am I ?</h3>
                 <span class="line mb-5"></span>
-                <h5 class="mb-3">A Web Designer / Developer Located In Our Lovely Earth</h5>
+                <h5 class="mb-3">PhD in Astrophysics and specialist in Nuclear Astrophysics searching for new challenges</h5>
                 <p class="mt-20">Lorem ipsum dolor sit amet, consectetur adipisicing elit.sit amet, Qui deserunt consequatur fugit repellendusillo voluptas?</p>
                 <button class="btn btn-outline-danger"><i class="icon-down-circled2 "></i>Download My CV</button>
             </div>
@@ -206,6 +297,10 @@
                             <div class="progress mb-3">
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 97%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
+														<h6>R</h6>
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                             <h6>C/C++</h6>
                             <div class="progress mb-3">
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -214,9 +309,9 @@
                             <div class="progress mb-3">
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <h6>Laborum</h6>
+                            <h6>SQL</h6>
                             <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 90%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <h6>Tempora</h6>
                             <div class="progress mb-3">
