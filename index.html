@@ -1632,13 +1632,11 @@
 		</script>
 		<style>
 			@media (max-width: 768px) {
-			    #conference-map {
-			        display: flex;
-			        flex-direction: column; /* Stack elements vertically */
-			    }
+	        #conference-map {
+	            display: flex;
+	            flex-direction: column;
+	        }
 
-
-	        /* Make the conference list horizontal */
 	        #conference-list {
 	            display: flex;
 	            overflow-x: auto;
@@ -1646,6 +1644,7 @@
 	            padding: 10px;
 	            background: #f8f9fa;
 	            border-bottom: 2px solid #ccc;
+	            width: 100%;
 	        }
 	        .conf-item {
 	            display: inline-block;
@@ -1656,6 +1655,13 @@
 	            cursor: pointer;
 	            white-space: normal;
 	        }
+
+	        #map {
+	            width: 100% !important;
+	            min-height: 400px !important;
+	            display: block !important;
+	        }
+	    }
 		</style>
 		<!-- </body>
 		</html> -->
