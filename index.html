@@ -1545,6 +1545,17 @@
 		        map.invalidateSize();
 		    }, 500);
 
+				// // Resize on window resize (for mobile orientation changes)
+		    // window.addEventListener("resize", function () {
+		    //     map.invalidateSize();
+		    // });
+
+				// Ensure the map resizes properly when orientation changes
+				window.addEventListener("resize", function () {
+				    setTimeout(function () {
+				        map.invalidateSize();
+				    }, 300);
+				});
 		    // Colors for different types of talks
 		    var markerColors = {
 		        "invited": "#f27474", // Red
@@ -1620,13 +1631,22 @@
 		    }
 		</script>
 		<style>
-		    @media (max-width: 768px) {
-		        #map {
-		            min-height: 400px !important;
-		            width: 100% !important;
-		            display: block !important;
-		        }
-		    }
+			@media (max-width: 768px) {
+			    #conference-map {
+			        display: flex;
+			        flex-direction: column; /* Stack elements vertically */
+			    }
+
+			    #conference-list {
+			        width: 100% !important; /* Make the sidebar full width */
+			        margin-bottom: 10px; /* Add space below the list */
+			    }
+
+			    #map {
+			        height: 400px !important; /* Ensure the map is visible */
+			        width: 100% !important;
+			    }
+			}
 		</style>
 		<!-- </body>
 		</html> -->
