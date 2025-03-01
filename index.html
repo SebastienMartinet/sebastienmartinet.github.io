@@ -1457,12 +1457,17 @@
 			    <div id="map"></div>
 			</div> -->
 
-		<script>
+		<!-- <script>
 		    // Initialize map
 		    var map = L.map('map').setView([50, -25], 3.8);
 		    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		        attribution: '&copy; OpenStreetMap contributors'
 		    }).addTo(map);
+
+				// Ensure the map resizes correctly when switching to mobile
+		    setTimeout(function() {
+		        map.invalidateSize();
+		    }, 500);
 
 				// Colors for different types of talks
 				var markerColors = {
@@ -1516,13 +1521,6 @@
                     .addTo(map)
                     .bindPopup(`<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}<br><em>${conf.contribution}</em>`);
 
-		        // conferences.filter(conf => conf.type === category).forEach(conf => {
-		        //     var marker = L.circleMarker([conf.lat, conf.lng], {
-		        //         color: markerColors[conf.type],
-		        //         radius: 8,
-		        //         fillOpacity: 0.8
-		        //     }).addTo(map).bindPopup(`<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}<br><em>${conf.contribution}</em>`);
-
 		            // Create sidebar entry
 		            var confItem = document.createElement("div");
 		            confItem.classList.add("conf-item", conf.type);
@@ -1534,6 +1532,92 @@
 		            conferenceList.appendChild(confItem);
 		        });
 		    });
+		</script> -->
+		<script>
+		    // Initialize map
+		    var map = L.map('map', { zoomControl: true }).setView([50, -25], 3.8);
+		    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		        attribution: '&copy; OpenStreetMap contributors'
+		    }).addTo(map);
+
+		    // Ensure the map resizes correctly when switching to mobile
+		    setTimeout(function() {
+		        map.invalidateSize();
+		    }, 500);
+
+		    // Colors for different types of talks
+		    var markerColors = {
+		        "invited": "#f27474", // Red
+		        "selected": "#5693f5", // Blue
+		        "seminar": "#f2dd74"  // Yellow
+		    };
+
+		    function createCustomIcon(color) {
+		        return L.divIcon({
+		            className: "custom-marker",
+		            html: `<svg width="30" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		                        <path fill="${color}" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+		                    </svg>`,
+		            iconSize: [30, 40],
+		            iconAnchor: [15, 40],
+		            popupAnchor: [0, -40]
+		        });
+		    }
+
+		    // Conference data
+		    var conferences = [
+				{ lat: 42.7525499,lng: 13.9623706, title: "s, i & r Element Nucleosynthesis (sirEN) Conference", date: "June 2025", country: "Austria", contribution: "Selected-talk on Statistical framework for nuclear parameter uncertainties in nucleosynthesis modeling of r- and i-process", type: "selected" },
+				{ lat: 50.1109, lng: 8.6821, title: "Nuclear Physics in Astrophysics XI", date: "Sept 2024", country: "Germany", contribution: "Invited-talk on r-process", type: "invited" },
+				{ lat: 41.89193, lng: 12.51133, title: "XIV Torino Workshop on AGB stars", date: "June 2024", country: "Italy", contribution: "Selected-talk on i-process", type: "selected" },
+				{ lat: 48.8566, lng: 2.3522, title: "4th ChETEC-INFRA General Assembly", date: "May 2024", country: "France", contribution: "Invited-talk on r-process", type: "invited" },
+				{ lat: 47.53333 , lng: 21.63333, title: "3rd ChETEC-INFRA General Assembly", date: "June 2023", country: "Hungary", contribution: "Invited-talk on NetGen tool", type: "invited" },
+				{ lat: 35.1264, lng: 33.4299, title: "i-process Nucleosynthesis Workshop", date: "May 2023", country: "Cyprus", contribution: "Selected-talk on i-process", type: "selected" },
+				{ lat: 47.4979, lng: 19.0402, title: "Astrophysics with Radioactive Isotopes", date: "June 2022", country: "Hungary", contribution: "Selected-talk on Very massive star winds as sources of the short-lived 26Al radioactive isotope", type: "selected" },
+				{ lat: 50.8503, lng: 4.3517, title: "Astrophysic Seminar ULB", date: "May 2022", country: "Belgium", contribution: "Seminar on Nuclear Physics", type: "seminar" },
+				{ lat: 53.3498, lng: -6.2603, title: "IAU Symposium 361", date: "May 2022", country: "Ireland", contribution: "Selected-talk on massive stars", type: "selected" },
+				{ lat: 47.5162, lng: 14.5501, title: "Russbach School on Nuclear Astrophysics", date: "Apr 2022", country: "Austria", contribution: "Selected talk on short-lived nuclei", type: "selected" },
+				{ lat: 35.7796, lng: -78.6382, title: "Astrophysic Seminar NC State Univ.", date: "Mar 2022", country: "USA", contribution: "Seminar on massive stars", type: "seminar" },
+				{ lat: 47.6825, lng: 11.0036, title: "XXth Nuclear Astrophysics Workshop", date: "Nov 2021", country: "Germany", contribution: "Selected talk on massive stars", type: "selected" },
+				{ lat: 46.2044, lng: 6.1432, title: "Stars as Probes of First-Star Nucleosynthesis", date: "Sept 2019", country: "Switzerland", contribution: "Invited Speaker on Pop III stars", type: "invited" }
+		    ];
+
+		    // Add markers & sidebar list
+		    var conferenceList = document.getElementById("conference-list");
+		    var categories = ["seminar", "invited", "selected"];
+		    var categoryTitles = { "seminar": "Seminars", "invited": "Invited Talks", "selected": "Selected Talks" };
+		    var bounds = new L.LatLngBounds();
+
+		    categories.forEach(category => {
+		        var categoryHeader = document.createElement("div");
+		        categoryHeader.classList.add("conf-category");
+		        categoryHeader.innerText = categoryTitles[category];
+		        conferenceList.appendChild(categoryHeader);
+
+		        conferences.filter(conf => conf.type === category).forEach(conf => {
+		            var marker = L.marker([conf.lat, conf.lng], { icon: createCustomIcon(markerColors[conf.type]) })
+		                .addTo(map)
+		                .bindPopup(`<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}<br><em>${conf.contribution}</em>`);
+
+		            bounds.extend(marker.getLatLng());
+
+		            var confItem = document.createElement("div");
+		            confItem.classList.add("conf-item", conf.type);
+		            confItem.innerHTML = `<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}`;
+		            confItem.onclick = function () {
+		                map.setView([conf.lat, conf.lng], 6);
+		                marker.openPopup();
+		            };
+		            conferenceList.appendChild(confItem);
+		        });
+		    });
+
+		    // Auto-zoom to fit all markers
+		    if (conferences.length > 0) {
+		        setTimeout(() => {
+		            map.fitBounds(bounds, { padding: [50, 50] });
+		            map.invalidateSize();
+		        }, 500);
+		    }
 		</script>
 
 		<!-- </body>
