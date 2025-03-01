@@ -1637,16 +1637,25 @@
 			        flex-direction: column; /* Stack elements vertically */
 			    }
 
-			    #conference-list {
-			        width: 100% !important; /* Make the sidebar full width */
-			        margin-bottom: 10px; /* Add space below the list */
-			    }
 
-			    #map {
-			        height: 400px !important; /* Ensure the map is visible */
-			        width: 100% !important;
-			    }
-			}
+	        /* Make the conference list horizontal */
+	        #conference-list {
+	            display: flex;
+	            overflow-x: auto;
+	            white-space: nowrap;
+	            padding: 10px;
+	            background: #f8f9fa;
+	            border-bottom: 2px solid #ccc;
+	        }
+	        .conf-item {
+	            display: inline-block;
+	            padding: 10px;
+	            margin: 5px;
+	            background: white;
+	            border-radius: 5px;
+	            cursor: pointer;
+	            white-space: normal;
+	        }
 		</style>
 		<!-- </body>
 		</html> -->
