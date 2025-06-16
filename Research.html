@@ -226,7 +226,7 @@
 							    <!-- <option value="w7_gamma">W7 Gamma</option> -->
 							  </select>
 							  <br>
-							  <img id="img-frame" src="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average_000.png" alt="Frame">
+							  <img id="img-frame" src="Frames/ab_w7_m2.0_FeHm0.0_ta235/w7_average_000.png" alt="Frame">
 							  <input type="range" id="slider" min="0" max="400" value="0" step="1">
 
 							  <br>
@@ -236,6 +236,18 @@
 							</div>
 
 							<script>
+							const preloadedImages = [];
+
+							function preloadImages() {
+							  const dataset = datasetSelect.value;
+							  preloadedImages.length = 0; // Clear old images
+							  for (let i = 0; i <= parseInt(slider.max); i++) {
+							    const frame = String(i).padStart(3, '0');
+							    const img = new Image();
+							    img.src = `${dataset}_${frame}.webp`; // <- Use .webp now
+							    preloadedImages[i] = img;
+							  }
+							}
 							  const slider = document.getElementById('slider');
 							  const imgFrame = document.getElementById('img-frame');
 							  const playPauseBtn = document.getElementById('playPauseBtn');
@@ -244,7 +256,7 @@
 							  let intervalId = null;
 
 							  slider.addEventListener('input', () => updateImage());
-							  datasetSelect.addEventListener('change', () => updateImage());
+							  datasetSelect.addEventListener('change', () =>   preloadImages(); updateImage());
 
 							  playPauseBtn.addEventListener('click', () => {
 							    if (intervalId === null) {
@@ -265,12 +277,16 @@
 							    }
 							  });
 
-							  function updateImage() {
-							    const dataset = datasetSelect.value;
-							    const frameNumber = slider.value.padStart(3, '0');
-							    imgFrame.src = `${dataset}_${frameNumber}.png`;
-							  }
-
+							  // function updateImage() {
+							  //   const dataset = datasetSelect.value;
+							  //   const frameNumber = slider.value.padStart(3, '0');
+							  //   imgFrame.src = `${dataset}_${frameNumber}.png`;
+							  // }
+								function updateImage() {
+								  const currentFrame = parseInt(slider.value);
+								  imgFrame.src = preloadedImages[currentFrame].src;
+								}
+								preloadImages();
 							  updateImage();  // Initialize
 							</script>
 
