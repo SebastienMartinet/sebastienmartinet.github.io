@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Responsive Image Slider</title>
+<style>
+  #slider-container { text-align: center; }
+  #slider { width: 80%; margin: 20px; }
+  #img-frame {
+    width: 80%;
+    height: auto;  /* Maintain aspect ratio */
+    display: block;
+    margin: auto;
+  }
+  button, select {
+    margin: 5px;
+    padding: 8px 12px;
+  }
+</style>
+</head>
+<body>
+
+<div id="slider-container">
+  <select id="datasetSelect">
+    <option value="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average">Type Ia Supernova (W7)</option>
+    <option value="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/aa_m25z01s4o17_ta253/Output/m25z01s4o17_average">Type II Supernova (25Msol Z=0.001 V/Vc=0.4)</option>
+    <!-- <option value="w7_gamma">W7 Gamma</option> -->
+  </select>
+  <br>
+  <img id="img-frame" src="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average_000.png" alt="Frame">
+  <input type="range" id="slider" min="0" max="400" value="0" step="1">
+  <br>
+  <button id="playPauseBtn">Play</button>
+</div>
+
+<script>
+  const slider = document.getElementById('slider');
+  const imgFrame = document.getElementById('img-frame');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const datasetSelect = document.getElementById('datasetSelect');
+
+  let intervalId = null;
+
+  slider.addEventListener('input', () => updateImage());
+  datasetSelect.addEventListener('change', () => updateImage());
+
+  playPauseBtn.addEventListener('click', () => {
+    if (intervalId === null) {
+      intervalId = setInterval(() => {
+        let currentValue = parseInt(slider.value, 10);
+        if (currentValue >= parseInt(slider.max, 10)) {
+          slider.value = slider.min;
+        } else {
+          slider.value = currentValue + 1;
+        }
+        updateImage();
+      }, 100);
+      playPauseBtn.textContent = 'Pause';
+    } else {
+      clearInterval(intervalId);
+      intervalId = null;
+      playPauseBtn.textContent = 'Play';
+    }
+  });
+
+  function updateImage() {
+    const dataset = datasetSelect.value;
+    const frameNumber = slider.value.padStart(3, '0');
+    imgFrame.src = `${dataset}_${frameNumber}.png`;
+  }
+
+  updateImage();  // Initialize
+</script>
+
+</body>
+</html>

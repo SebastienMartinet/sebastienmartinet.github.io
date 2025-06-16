@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Leaflet CSS -->
+<!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- Leaflet JavaScript -->
+<!-- <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Sébastien Martinet.">
+    <meta name="author" content="Devcrud">
+    <title>Sébastien Martinet</title>
+    <!-- font icons -->
+    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+    <!-- Bootstrap + JohnDoe main styles -->
+	<link rel="stylesheet" href="assets/css/johndoe.css">
+	<style>
+	header {
+	    position: relative;
+	    height: 30vh;
+	    min-height: 600px;
+	    overflow: hidden;
+	    color: #fff;
+	}
+
+	.header-background {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background-size: cover;
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    background-attachment: fixed;
+	    transition: opacity 1.5s ease-in-out;
+	}
+
+	.header-background.current {
+	    opacity: 1;
+	    z-index: 1;
+	}
+
+	.header-background.next {
+	    opacity: 0;
+	    z-index: 0;
+	}
+
+	.header-overlay {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0, 0, 0, 0.5); /* Dark overlay with transparency */
+	    z-index: 2;
+	}
+
+	.header-content {
+	    position: relative;
+	    z-index: 3;
+	}
+	</style>
+	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <meta name="description" content="Sébastien Martinet">
+	    <meta name="author" content="Devcrud">
+	    <title>Sébastien Martinet</title>
+	    <!-- font icons -->
+	    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+	    <!-- Bootstrap + JohnDoe main styles -->
+	    <link rel="stylesheet" href="assets/css/johndoe.css">
+	    <style>
+	        /* Include the updated CSS here */
+	    </style>
+	</head>
+	<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+	    <a href="index.html" class="btn btn-primary btn-component" data-spy="affix" data-offset-top="600">
+	        <i class="ti-shift-left-alt"></i> Components
+	    </a>
+
+	    <header class="header">
+	        <!-- Background layers -->
+	        <div class="header-background current"></div>
+	        <div class="header-background next"></div>
+
+	        <!-- Dark overlay applied once on the header -->
+	        <div class="header-overlay"></div>
+
+	        <div class="container">
+	            <div class="header-content">
+	                <h4 class="header-subtitle">Hello, I am</h4>
+	                <h1 class="header-title">Sébastien Martinet</h1>
+	                <h6 class="header-mono">PhD in Astrophysics | Researcher</h6>
+									<!-- <h6 class="header-mono">Expert in statistics and modelling</h6> -->
+	                <button class="btn btn-primary btn-rounded">
+	                    <i class="ti-printer pr-2"></i>Print Resume
+	                </button>
+	            </div>
+	        </div>
+	    </header>
+
+			<script>
+			document.addEventListener("DOMContentLoaded", function() {
+			  const images = [
+					// 'assets/imgs/defense_thesis.jpeg',
+					'assets/imgs/crop_up_sombrero.jpg',
+					'assets/imgs/test_papers.jpg',
+			    'assets/imgs/Table_Uranium.png',
+					'assets/imgs/test_papers.jpg',
+			    'assets/imgs/header_crop.jpg'
+			  ];
+			  let currentIndex = 0;
+			  let currentBg = document.querySelector('.header-background.current');
+			  let nextBg = document.querySelector('.header-background.next');
+
+			  // Set initial background images
+			  currentBg.style.backgroundImage = `url(${images[currentIndex]})`;
+			  nextBg.style.backgroundImage = `url(${images[(currentIndex + 1) % images.length]})`;
+
+			  function changeBackgroundImage() {
+			    // Update index to next image
+			    currentIndex = (currentIndex + 1) % images.length;
+			    // Set the next image on the hidden background element
+			    nextBg.style.backgroundImage = `url(${images[currentIndex]})`;
+
+			    // Swap classes for the fade transition
+			    currentBg.classList.remove('current');
+			    currentBg.classList.add('next');
+			    nextBg.classList.remove('next');
+			    nextBg.classList.add('current');
+
+			    // Swap the element references for the next cycle
+			    let temp = currentBg;
+			    currentBg = nextBg;
+			    nextBg = temp;
+			  }
+
+			  // Change image every 5 seconds
+			  setInterval(changeBackgroundImage, 5000);
+			});
+			</script>
+			<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white" data-spy="affix" data-offset-top="510">
+        <div class="container">
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse mt-sm-20 navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#about" class="nav-link">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#resume" class="nav-link">Resume</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav brand">
+                    <img src="assets/imgs/avatar.png" alt="" class="brand-img">
+                    <li class="brand-txt">
+                        <h5 class="brand-title">Sébastien Martinet</h5>
+                        <div class="brand-subtitle">PhD in Astrophysics | Researcher</div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- <li class="nav-item">
+                        <a href="#portfolio" class="nav-link">Portfolio</a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a href="#blog" class="nav-link">Blog</a>
+                    </li> -->
+										<li class="nav-item">
+												<a href="index.html#publications" class="nav-link">Publications</a>
+										</li>
+										<li class="nav-item">
+												<a href="Conferences.html" class="nav-link">Conferences</a>
+										</li>
+										<li class="nav-item">
+                        <a href="Research.html" class="nav-link">Research</a>
+                    </li>
+
+
+                    <!-- <li class="nav-item last-item">
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+				<!-- Filtering Script -->
+				<script>
+				  // Wait until the DOM is fully loaded
+				  document.addEventListener("DOMContentLoaded", function() {
+				    const filterButtons = document.querySelectorAll('.filter-btn');
+				    const publicationItems = document.querySelectorAll('.publication-item');
+
+				    filterButtons.forEach(btn => {
+				      btn.addEventListener('click', function() {
+				        // Remove "active" class from all buttons and add to the current one
+				        filterButtons.forEach(button => button.classList.remove('active'));
+				        this.classList.add('active');
+
+				        const filterValue = this.getAttribute('data-filter');
+				        publicationItems.forEach(item => {
+				          // If 'all' is selected or item has the corresponding keyword class, display it
+				          if (filterValue === 'all' || item.classList.contains(filterValue)) {
+				            item.style.display = '';
+				          } else {
+				            item.style.display = 'none';
+				          }
+				        });
+				      });
+				    });
+				  });
+				</script>
+
+				<!-- <h2 class="mb-4 text-center bg-light"><span class="text-danger">Conference</span> Map</h2> -->
+
+				<div id="container">
+				    <div id="sidebar">
+				        <!-- <h2>Conference List</h2> -->
+				        <div id="conference-list"></div>
+				    </div>
+				    <div id="map"></div>
+				</div>
+
+				<!-- <section id="conference-map" class="resume-section bg-light">
+				  <div class="container">
+				    <div id="map" style="height: 500px; width: 100%;"></div>
+				  </div>
+				</section> -->
+
+				<!-- Conference Map Section (Map Only) -->
+				<section class="section" id="conference-map">
+				  <div class="container">
+				    <!-- <h2 class="mb-5"><span class="text-danger">Conference</span> Map</h2> -->
+				    <div class="row">
+				      <div class="col-12">
+				        <div id="map" class="rounded shadow-sm" style="height: 500px; width: 100%;"></div>
+				      </div>
+				    </div>
+				  </div>
+				</section>
+
+				<style>
+				  /* Ensure full responsiveness for the map section */
+				  #conference-map .container {
+				    padding: 20px;
+				  }
+				  #conference-map h2 {
+				    text-align: center;
+				  }
+				</style>
+
+
+    <!-- <section class="section bg-custom-gray" id="price">
+        <div class="container">
+            <h1 class="mb-5"><span class="text-danger">Packs</span> Pricing</h1>
+            <div class="row align-items-center">
+                <div class="col-md-6 col-lg-3">
+                    <div class="price-card text-center mb-4">
+                        <h3 class="price-card-title">Free</h3>
+                        <div class="price-card-cost">
+                            <sup class="ti-money"></sup>
+                            <span class="num">0</span>
+                            <span class="date">MO</span>
+                        </div>
+                        <ul class="list">
+                            <li class="list-item">5 <span class="text-muted">Project</span></li>
+                            <li class="list-item">1GB <span class="text-muted">Storage</span></li>
+                            <li class="list-item"><span class="text-muted">No Domain</span></li>
+                            <li class="list-item">1 <span class="text-muted">User</span></li>
+                        </ul>
+                        <button class="btn btn-primary btn-rounded w-lg">Subscribe</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="price-card text-center mb-4">
+                        <h3 class="price-card-title">Basic</h3>
+                        <div class="price-card-cost">
+                            <sup class="ti-money"></sup>
+                            <span class="num">10</span>
+                            <span class="date">MO</span>
+                        </div>
+                        <ul class="list">
+                            <li class="list-item">50 <span class="text-muted">Project</span></li>
+                            <li class="list-item">10GB <span class="text-muted">Storage</span></li>
+                            <li class="list-item">1<span class="text-muted">Domain</span></li>
+                            <li class="list-item">5 <span class="text-muted">User</span></li>
+                        </ul>
+                        <button class="btn btn-primary btn-rounded w-lg">Subscribe</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="price-card text-center price-card-requried mb-4">
+                        <h3 class="price-card-title">Exclusive</h3>
+                        <div class="price-card-cost">
+                            <sup class="ti-money"></sup>
+                            <span class="num">25</span>
+                            <span class="date">MO</span>
+                        </div>
+                        <ul class="list">
+                            <li class="list-item">150 <span class="text-muted">Project</span></li>
+                            <li class="list-item">15GB <span class="text-muted">Storage</span></li>
+                            <li class="list-item">5<span class="text-muted"> Domain</span></li>
+                            <li class="list-item">15<span class="text-muted">User</span></li>
+                        </ul>
+                        <button class="btn btn-primary btn-rounded w-lg">Subscribe</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="price-card text-center mb-4">
+                        <h3 class="price-card-title">Pro</h3>
+                        <div class="price-card-cost">
+                            <sup class="ti-money"></sup>
+                            <span class="num">99</span>
+                            <span class="date">MO</span>
+                        </div>
+                        <ul class="list">
+                            <li class="list-item">500 <span class="text-muted">Project</span></li>
+                            <li class="list-item">1000GB <span class="text-muted">Storage</span></li>
+                            <li class="list-item">10<span class="text-muted"> Domain</span></li>
+                            <li class="list-item">Unlimite<span class="text-muted">User</span></li>
+                        </ul>
+                        <button class="btn btn-primary btn-rounded w-lg">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+
+		<!-- ######################################################################## GOOD IDEA ##########
+
+
+<!--
+		<section class="section bg-dark text-center">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-6 col-lg-3">
+                    <div class="row ">
+                        <div class="col-5 text-right text-light border-right py-3">
+                            <div class="m-auto"><i class="ti-alarm-clock icon-xl"></i></div>
+                        </div>
+                        <div class="col-7 text-left py-3">
+                            <h1 class="text-danger font-weight-bold font40">500</h1>
+                            <p class="text-light mb-1">Hours Worked</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="row">
+                        <div class="col-5 text-right text-light border-right py-3">
+                            <div class="m-auto"><i class="ti-layers-alt icon-xl"></i></div>
+                        </div>
+                        <div class="col-7 text-left py-3">
+                            <h1 class="text-danger font-weight-bold font40">50K</h1>
+                            <p class="text-light mb-1">Project Finished</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="row">
+                        <div class="col-5 text-right text-light border-right py-3">
+                            <div class="m-auto"><i class="ti-face-smile icon-xl"></i></div>
+                        </div>
+                        <div class="col-7 text-left py-3">
+                            <h1 class="text-danger font-weight-bold font40">200K</h1>
+                            <p class="text-light mb-1">Happy Clients</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="row">
+                        <div class="col-5 text-right text-light border-right py-3">
+                            <div class="m-auto"><i class="ti-heart-broken icon-xl"></i></div>
+                        </div>
+                        <div class="col-7 text-left py-3">
+                            <h1 class="text-danger font-weight-bold font40">2k</h1>
+                            <p class="text-light mb-1">Coffee Drinked</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+		<section class="section bg-dark py-5">
+				<div class="container text-center">
+						<h2 class="text-light font-weight-normal"> Outreach </h2>
+				</div>
+		</section>
+
+
+    <div class="section contact" id="contact">
+        <div id="map" class="map"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="contact-form-card">
+                        <h4 class="contact-title">Send a message</h4>
+                        <form action="">
+                            <div class="form-group">
+                                <input  class="form-control" type="text" placeholder="Name *" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="email" placeholder="Email *" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" id=" placeholder="Message *" rows="7" required></textarea>
+                            </div>
+                            <div class="form-group ">
+                                <button type="submit" class="form-control btn btn-primary" >Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="contact-info-card">
+                        <h4 class="contact-title">Get in touch</h4>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-mobile icon-md"></i>
+                            </div>
+                            <div class="col-10 ">
+                                <h6 class="d-inline">Phone : <br> <span class="text-muted">+ (123) 456-789</span></h6>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-map-alt icon-md"></i>
+                            </div>
+                            <div class="col-10">
+                                <h6 class="d-inline">Address :<br> <span class="text-muted">12345 Fake ST NoWhere AB Country.</span></h6>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-envelope icon-md"></i>
+                            </div>
+                            <div class="col-10">
+                                <h6 class="d-inline">Email :<br> <span class="text-muted">info@website.com</span></h6>
+                            </div>
+                        </div>
+                        <ul class="social-icons pt-4">
+                            <!-- <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-facebook" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-twitter" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-google" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-instagram" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-github" aria-hidden="true"></i></a></li> -->
+														<li class="social-item"><a class="social-link" href="https://www.linkedin.com/in/s%C3%A9bastien-martinet/"><i class="ti-linkedin" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="footer py-3">
+        <div class="container">
+            <p class="small mb-0 text-light">
+                &copy; <script>document.write(new Date().getFullYear())</script> Created With <i class="ti-heart text-danger"></i> By <a href="http://devcrud.com" target="_blank"><span class="text-danger" title="Bootstrap 4 Themes and Dashboards">DevCRUD</span></a>
+            </p>
+        </div>
+    </footer>
+
+	<!-- core  -->
+    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+
+    <!-- bootstrap 3 affix -->
+    <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- Isotope  -->
+    <script src="assets/vendors/isotope/isotope.pkgd.js"></script>
+
+    <!-- Google mpas -->
+    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap"></script> -->
+
+    <!-- JohnDoe js -->
+		<!-- <!DOCTYPE html>
+		<html lang="en"> -->
+		<!-- <head> -->
+		    <!-- <meta charset="UTF-8">
+		    <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+		    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+		    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> -->
+		    <style>
+		        body {
+		            font-family: Arial, sans-serif;
+		        }
+		        #container {
+							display: flex;
+					    flex-direction: row; /* Ensures elements are side by side */
+					    height: 90vh;
+							width: 100vw;
+	            justify-content: space-between; /* Ensures spacing on both sides */
+	            padding: 0 50px; /* Adds space to the left and right */
+							background-color: #f8f9fa !important;
+						#sidebar {
+						    width: 30%;
+						    min-width: 250px;
+						    max-width: 350px; /* Prevent sidebar from getting too large */
+						    background: #f8f9fa;
+						    padding: 15px;
+						    overflow-y: auto;
+						    border-right: 2px solid #ccc;
+						    display: block;
+								margin-left: 50px; /* Space on the left side */
+						}
+
+						#map {
+						    flex-grow: 1.0; /* Allow the map to take up remaining space */
+						    height: 100%;
+								margin-right: 50px; /* Space on the right side */
+						}
+		        }
+		        .conf-category {
+		            font-size: 1.2em;
+		            font-weight: bold;
+		            margin-top: 10px;
+		        }
+		        .conf-item {
+		            padding: 8px;
+		            margin-bottom: 5px;
+		            cursor: pointer;
+		            border-left: 5px solid #ccc;
+		            <!-- background: white; -->
+		            transition: 0.3s;
+		        }
+		        .conf-item:hover {
+		            background: #e9ecef;
+		        }
+		        .invited { border-color: #f27474; }
+		        .selected { border-color: #5693f5; }
+		        .seminar { border-color: #f2dd74; }
+
+		    </style>
+		</head>
+		<!-- <body> -->
+
+			<!-- <div id="container">
+			    <div id="sidebar">
+			        <h2>Conference List</h2>
+			        <div id="conference-list"></div>
+			    </div>
+			    <div id="map"></div>
+			</div> -->
+
+		<!-- <script>
+		    // Initialize map
+		    var map = L.map('map').setView([50, -25], 3.8);
+		    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		        attribution: '&copy; OpenStreetMap contributors'
+		    }).addTo(map);
+
+				// Ensure the map resizes correctly when switching to mobile
+		    setTimeout(function() {
+		        map.invalidateSize();
+		    }, 500);
+
+				// Colors for different types of talks
+				var markerColors = {
+            "invited": "#f27474", // Red
+            "selected": "#5693f5", // Green
+            "seminar": "#f2dd74"  // Blue
+        };
+
+        function createCustomIcon(color) {
+            return L.divIcon({
+                className: "custom-marker",
+                html: `<svg width="30" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="${color}" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+                iconSize: [30, 40],
+                iconAnchor: [15, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+		    // Conference data
+		    var conferences = [
+						{ lat: 42.7525499,lng: 13.9623706, title: "s, i & r Element Nucleosynthesis (sirEN) Conference", date: "June 2025", country: "Austria", contribution: "Selected-talk on Statistical framework for nuclear parameter uncertainties in nucleosynthesis modeling of r- and i-process", type: "selected" },
+						{ lat: 47.4970, lng: 19.0410, title: "8th p-process workshop 2024", date: "Oct 2024", country: "Hungary", contribution: "Selected-talk on p-process nuclear uncertainties", type: "selected" },
+		        { lat: 50.1109, lng: 8.6821, title: "Nuclear Physics in Astrophysics XI", date: "Sept 2024", country: "Germany", contribution: "Invited-talk on r-process", type: "invited" },
+		        { lat: 41.89193, lng: 12.51133, title: "XIV Torino Workshop on AGB stars", date: "June 2024", country: "Italy", contribution: "Selected-talk on i-process", type: "selected" },
+		        { lat: 48.8566, lng: 2.3522, title: "4th ChETEC-INFRA General Assembly", date: "May 2024", country: "France", contribution: "Invited-talk on r-process", type: "invited" },
+		        { lat: 47.53333 , lng: 21.63333, title: "3rd ChETEC-INFRA General Assembly", date: "June 2023", country: "Hungary", contribution: "Invited-talk on NetGen tool", type: "invited" },
+		        { lat: 35.1264, lng: 33.4299, title: "i-process Nucleosynthesis Workshop", date: "May 2023", country: "Cyprus", contribution: "Selected-talk on i-process", type: "selected" },
+						{ lat: 47.4979, lng: 19.0402, title: "Astrophysics with Radioactive Isotopes", date: "June 2022", country: "Hungary", contribution: "Selected-talk on Very massive star winds as sources of the short-lived 26Al radioactive isotope", type: "selected" },
+		        { lat: 50.8503, lng: 4.3517, title: "Astrophysic Seminar ULB", date: "May 2022", country: "Belgium", contribution: "Seminar on Nuclear Physics", type: "seminar" },
+		        { lat: 53.3498, lng: -6.2603, title: "IAU Symposium 361", date: "May 2022", country: "Ireland", contribution: "Selected-talk on massive stars", type: "selected" },
+		        { lat: 47.5162, lng: 14.5501, title: "Russbach School on Nuclear Astrophysics", date: "Apr 2022", country: "Austria", contribution: "Selected talk on short-lived nuclei", type: "selected" },
+		        { lat: 35.7796, lng: -78.6382, title: "Astrophysic Seminar NC State Univ.", date: "Mar 2022", country: "USA", contribution: "Seminar on massive stars", type: "seminar" },
+		        { lat: 47.6825, lng: 11.0036, title: "XXth Nuclear Astrophysics Workshop", date: "Nov 2021", country: "Germany", contribution: "Selected talk on massive stars", type: "selected" },
+		        { lat: 46.2044, lng: 6.1432, title: "Stars as Probes of First-Star Nucleosynthesis", date: "Sept 2019", country: "Switzerland", contribution: "Invited Speaker on Pop III stars", type: "invited" }
+		    ];
+
+
+
+		    // Add markers & sidebar list
+		    var conferenceList = document.getElementById("conference-list");
+		    var categories = ["seminar", "invited", "selected"];
+		    var categoryTitles = {"seminar": "Seminars","invited": "Invited Talks","selected": "Selected Talks",};
+
+		    categories.forEach(category => {
+		        var categoryHeader = document.createElement("div");
+		        categoryHeader.classList.add("conf-category");
+		        categoryHeader.innerText = categoryTitles[category];
+		        conferenceList.appendChild(categoryHeader);
+
+						conferences.filter(conf => conf.type === category).forEach(conf => {
+                var marker = L.marker([conf.lat, conf.lng], { icon: createCustomIcon(markerColors[conf.type]) })
+                    .addTo(map)
+                    .bindPopup(`<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}<br><em>${conf.contribution}</em>`);
+
+		            // Create sidebar entry
+		            var confItem = document.createElement("div");
+		            confItem.classList.add("conf-item", conf.type);
+		            confItem.innerHTML = `<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}`;
+		            confItem.onclick = function () {
+		                map.setView([conf.lat, conf.lng], 6);
+		                marker.openPopup();
+		            };
+		            conferenceList.appendChild(confItem);
+		        });
+		    });
+		</script> -->
+		<script>
+		    // Initialize map
+		    var map = L.map('map', { zoomControl: true }).setView([50, -25], 3.8);
+		    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		        attribution: '&copy; OpenStreetMap contributors'
+		    }).addTo(map);
+
+		    // Ensure the map resizes correctly when switching to mobile
+		    setTimeout(function() {
+		        map.invalidateSize();
+		    }, 500);
+
+				// // Resize on window resize (for mobile orientation changes)
+		    // window.addEventListener("resize", function () {
+		    //     map.invalidateSize();
+		    // });
+
+				// Ensure the map resizes properly when orientation changes
+				window.addEventListener("resize", function () {
+				    setTimeout(function () {
+				        map.invalidateSize();
+				    }, 300);
+				});
+		    // Colors for different types of talks
+		    var markerColors = {
+		        "invited": "#f27474", // Red
+		        "selected": "#5693f5", // Blue
+		        "seminar": "#f2dd74"  // Yellow
+		    };
+
+		    function createCustomIcon(color) {
+		        return L.divIcon({
+		            className: "custom-marker",
+		            html: `<svg width="30" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+		                        <path fill="${color}" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+		                    </svg>`,
+		            iconSize: [30, 40],
+		            iconAnchor: [15, 40],
+		            popupAnchor: [0, -40]
+		        });
+		    }
+
+		    // Conference data
+		    var conferences = [
+				{ lat: 42.7525499,lng: 13.9623706, title: "s, i & r Element Nucleosynthesis (sirEN) Conference", date: "June 2025", country: "Italy", contribution: "Selected-talk on Statistical framework for nuclear parameter uncertainties in nucleosynthesis modeling of r- and i-process", type: "selected" },
+				{ lat: 47.4670, lng: 18.90010, title: "8th p-process workshop 2024", date: "Oct 2024", country: "Hungary", contribution: "Selected-talk on p-process nuclear uncertainties", type: "selected" },
+				{ lat: 50.1109, lng: 8.6821, title: "Nuclear Physics in Astrophysics XI", date: "Sept 2024", country: "Germany", contribution: "Invited-talk on r-process", type: "invited" },
+				{ lat: 41.89193, lng: 12.51133, title: "XIV Torino Workshop on AGB stars", date: "June 2024", country: "Italy", contribution: "Selected-talk on i-process", type: "selected" },
+				{ lat: 48.8566, lng: 2.3522, title: "4th ChETEC-INFRA General Assembly", date: "May 2024", country: "France", contribution: "Invited-talk on r-process", type: "invited" },
+				{ lat: 47.53333 , lng: 21.63333, title: "3rd ChETEC-INFRA General Assembly", date: "June 2023", country: "Hungary", contribution: "Invited-talk on NetGen tool", type: "invited" },
+				{ lat: 35.1264, lng: 33.4299, title: "i-process Nucleosynthesis Workshop", date: "May 2023", country: "Cyprus", contribution: "Selected-talk on i-process", type: "selected" },
+				{ lat: 47.4979, lng: 19.0402, title: "Astrophysics with Radioactive Isotopes", date: "June 2022", country: "Hungary", contribution: "Selected-talk on Very massive star winds as sources of the short-lived 26Al radioactive isotope", type: "selected" },
+				{ lat: 50.8503, lng: 4.3517, title: "Astrophysic Seminar ULB", date: "May 2022", country: "Belgium", contribution: "Seminar on Nuclear Physics", type: "seminar" },
+				{ lat: 53.3498, lng: -6.2603, title: "IAU Symposium 361", date: "May 2022", country: "Ireland", contribution: "Selected-talk on massive stars", type: "selected" },
+				{ lat: 47.5162, lng: 14.5501, title: "Russbach School on Nuclear Astrophysics", date: "Apr 2022", country: "Austria", contribution: "Selected talk on short-lived nuclei", type: "selected" },
+				{ lat: 35.7796, lng: -78.6382, title: "Astrophysic Seminar NC State Univ.", date: "Mar 2022", country: "USA", contribution: "Seminar on massive stars", type: "seminar" },
+				{ lat: 47.6825, lng: 11.0036, title: "XXth Nuclear Astrophysics Workshop", date: "Nov 2021", country: "Germany", contribution: "Selected talk on massive stars", type: "selected" },
+				{ lat: 46.2044, lng: 6.1432, title: "Stars as Probes of First-Star Nucleosynthesis", date: "Sept 2019", country: "Switzerland", contribution: "Invited Speaker on Pop III stars", type: "invited" }
+		    ];
+
+		    // Add markers & sidebar list
+		    var conferenceList = document.getElementById("conference-list");
+		    var categories = ["seminar", "invited", "selected"];
+		    var categoryTitles = { "seminar": "Seminars", "invited": "Invited Talks", "selected": "Selected Talks" };
+		    var bounds = new L.LatLngBounds();
+
+		    categories.forEach(category => {
+		        var categoryHeader = document.createElement("div");
+		        categoryHeader.classList.add("conf-category");
+		        categoryHeader.innerText = categoryTitles[category];
+		        conferenceList.appendChild(categoryHeader);
+
+		        conferences.filter(conf => conf.type === category).forEach(conf => {
+		            var marker = L.marker([conf.lat, conf.lng], { icon: createCustomIcon(markerColors[conf.type]) })
+		                .addTo(map)
+		                .bindPopup(`<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}<br><em>${conf.contribution}</em>`);
+
+		            bounds.extend(marker.getLatLng());
+
+		            var confItem = document.createElement("div");
+		            confItem.classList.add("conf-item", conf.type);
+		            confItem.innerHTML = `<strong>${conf.title}</strong><br>${conf.date} - ${conf.country}`;
+		            confItem.onclick = function () {
+		                map.setView([conf.lat, conf.lng], 6);
+		                marker.openPopup();
+		            };
+		            conferenceList.appendChild(confItem);
+		        });
+		    });
+
+		    // Auto-zoom to fit all markers
+		    if (conferences.length > 0) {
+		        setTimeout(() => {
+		            map.fitBounds(bounds, { padding: [10, 10] });
+		            map.invalidateSize();
+		        }, 500);
+		    }
+		</script>
+		<style>
+			@media (max-width: 768px) {
+	        #conference-map {
+	            display: flex;
+	            flex-direction: column;
+	        }
+
+	        #conference-list {
+	            display: flex;
+	            overflow-x: auto;
+	            white-space: nowrap;
+	            padding: 10px;
+	            background: #f8f9fa;
+	            border-bottom: 2px solid #ccc;
+	            width: 100%;
+	        }
+	        .conf-item {
+	            display: inline-block;
+	            padding: 10px;
+	            margin: 5px;
+	            background: white;
+	            border-radius: 5px;
+	            cursor: pointer;
+	            white-space: normal;
+	        }
+
+	        #map {
+	            width: 100% !important;
+	            min-height: 400px !important;
+	            display: block !important;
+	        }
+	    }
+		</style>
+		<!-- </body>
+		</html> -->
+		<!-- Collaboration Map Section -->
+		<section id="collaboration-map" class="section">
+		  <div class="container">
+		    <h2 class="mb-5"><span class="text-danger">Collaboration</span> Map</h2>
+		    <div id="collab-map" style="height: 500px; width: 100%;"></div>
+		  </div>
+		</section>
+
+<script src="https://unpkg.com/leaflet-curve"></script>
+		<script>
+			function createCustomIcon(size,color) {
+    return L.divIcon({
+        className: "custom-marker",
+        html: `<svg width="${size}" height="${size * 1.3}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="${color}" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>`,
+        iconSize: [size, size * 1.3],
+        iconAnchor: [size / 2, size * 1.3],
+        popupAnchor: [0, -size]
+    });
+}
+		  // Initialize the map centered around Brussels, Belgium
+		  var collabMap = L.map('collab-map').setView([50.8503, 4.3517], 4);
+		  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		      attribution: '&copy; OpenStreetMap contributors'
+		  }).addTo(collabMap);
+
+			setTimeout(() => {
+			    collabMap.invalidateSize();  // Fixes hidden map issues
+			}, 500);
+
+		  // Your location: Brussels, Belgium
+		  var myLocation = {lat: 50.8503, lng: 4.3517, name: "Brussels, Belgium"};
+		  var myMarker =  L.marker([myLocation.lat, myLocation.lng], { icon: createCustomIcon(30,'#5693f5') }).addTo(collabMap)
+		    .bindPopup("<strong>" + myLocation.name + "</strong>").openPopup();
+
+		  // Collaborator affiliations (unique) with approximate coordinates.
+		  // Coordinates are approximate and based on major city centers.
+		  var collaborators = [
+		    { name: "Vrije Universiteit, Brussels", lat: 50.8503, lng: 4.3517 },
+		    { name: "Universitat de València, Burjassot", lat: 39.4699, lng: -0.3763 },
+		    { name: "Observatori Astronòmic, Universitat de València, Paterna", lat: 39.5, lng: -0.45 },
+		    { name: "Keele University, Department of Physics and Astrophysics", lat: 52.9880, lng: -2.1679 },
+		    { name: "University of Tokyo, Kavli Institute", lat: 35.6895, lng: 139.6917 },
+		    { name: "University of Oslo, Department of Physics", lat: 59.9139, lng: 10.7522 },
+		    { name: "Technical University of Darmstadt, Department of Physics", lat: 49.8728, lng: 8.6512 },
+		    { name: "Western Michigan University", lat: 42.2917, lng: -85.5872 },
+		    { name: "Michigan State University, NSCL", lat: 42.7369, lng: -84.4839 },
+		    { name: "Grand Accelerateur National d'Ions, Caen", lat: 49.1829, lng: -0.3700 },
+		    { name: "University of Geneva, Astronomical Observatory", lat: 46.2044, lng: 6.1432 },
+		    { name: "Institut Pluridisciplinaire Hubert Curien, Strasbourg", lat: 48.5734, lng: 7.7521 },
+		    { name: "Texas A&M University, Cyclotron Institute", lat: 30.6279, lng: -96.3344 },
+		    { name: "University of Dublin Trinity College", lat: 53.3498, lng: -6.2603 },
+		    { name: "University of Cambridge, Institute of Astronomy", lat: 52.2053, lng: 0.1218 },
+		    { name: "University of Malaya", lat: 3.1390, lng: 101.6869 },
+		    { name: "Institut de Mineralogie, de Physique des Materiaux et de Cosmochimie, Paris", lat: 48.8566, lng: 2.3522 },
+		    { name: "University of Chicago, Astronomy and Astrophysics", lat: 41.8781, lng: -87.6298 },
+		    { name: "Astrophysical Institute of the Canaries, University of La Laguna", lat: 28.2916, lng: -16.6291 },
+		    { name: "Leibniz Institute for Astrophysics, Potsdam", lat: 52.3906, lng: 13.0657 }
+		  ];
+
+			function createCurvedPath(start, end) {
+			    var controlPoint = [
+			        (start[0] + end[0]) / 2 + 4,  // Adjust curvature by shifting the midpoint
+			        (start[1] + end[1]) / 2 + 1
+			    ];
+
+			    var path = [
+			        'M', start,
+			        'Q', controlPoint, end
+			    ];
+
+			    return L.curve(path, { color: '#5693f5', weight: 4, opacity: 0.65 ,dashArray: '5, 7'}).addTo(collabMap);
+			}
+
+			collaborators.forEach(function(collab) {
+			    L.marker([collab.lat, collab.lng], { icon: createCustomIcon(20,'#f27474') }).addTo(collabMap)
+			        .bindPopup("<strong>" + collab.name + "</strong>");
+
+			    createCurvedPath([myLocation.lat, myLocation.lng], [collab.lat, collab.lng]);
+			});
+
+
+			// Ensure correct zoom and fit bounds
+			var allPoints = collaborators.map(c => [c.lat, c.lng]);
+			allPoints.push([myLocation.lat, myLocation.lng]);
+
+			setTimeout(() => {
+			    collabMap.fitBounds(L.latLngBounds(allPoints), { padding: [-10, -10] });
+			}, 1000);  // Delay ensures container is fully rendered before adjusting bounds
+		</script>
+
+		<style>
+		  /* Style the Collaboration Map Section */
+		  #collaboration-map .container {
+		    padding: 20px;
+		  }
+		  #collaboration-map h2 {
+		    text-align: center;
+		    margin-bottom: 20px;
+		  }
+				#collab-map {
+	    width: 100%;
+	    height: 300px;  /* Adjust height as needed */
+	    border-radius: 8px; /* Optional: adds rounded corners */
+	    margin-top: 15px;
+			}
+		</style>
+
+
+</body>
+</html>

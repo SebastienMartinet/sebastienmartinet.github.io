@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Image Slider with Play/Loop</title>
+<style>
+  #slider-container { text-align: center; }
+  #slider { width: 80%; margin: 20px; }
+  /* #img-frame { width: 640px; height: 480px; } */
+  #img-frame {
+    width: 80%;    /* Responsive width */
+    height: auto;  /* Maintain aspect ratio */
+    display: block;
+    margin: auto;  /* Center if needed */
+  }
+  button { margin: 5px; padding: 8px 12px; }
+</style>
+</head>
+<body>
+
+<div id="slider-container">
+  <img id="img-frame" src="w7_avera_000.png" alt="Frame">
+  <input type="range" id="slider" min="0" max="400" value="0" step="1">
+  <br>
+  <button id="playBtn">Play</button>
+  <button id="pauseBtn">Pause</button>
+</div>
+
+<script>
+  const slider = document.getElementById('slider');
+  const imgFrame = document.getElementById('img-frame');
+  const playBtn = document.getElementById('playBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+
+  let intervalId = null;  // For the autoplay interval
+
+  // Update image when slider moves
+  slider.addEventListener('input', () => {
+    updateImage();
+  });
+
+  function updateImage() {
+    const frameNumber = slider.value.padStart(3, '0');
+    imgFrame.src = `/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average_${frameNumber}.png`;  // Adjust file names accordingly
+  }
+
+  // Play button: start autoplay
+  playBtn.addEventListener('click', () => {
+    if (intervalId === null) { // Avoid multiple intervals
+      intervalId = setInterval(() => {
+        let currentValue = parseInt(slider.value, 10);
+        if (currentValue >= parseInt(slider.max, 10)) {
+          // Loop: go back to start
+          slider.value = slider.min;
+        } else {
+          slider.value = currentValue + 1;
+        }
+        updateImage();
+      }, 100);  // Adjust speed here (milliseconds)
+    }
+  });
+
+  // Pause button: stop autoplay
+  pauseBtn.addEventListener('click', () => {
+    clearInterval(intervalId);
+    intervalId = null;
+  });
+
+  // Initialize with the first frame
+  updateImage();
+</script>
+
+</body>
+</html>
