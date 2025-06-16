@@ -240,31 +240,49 @@
 							  const imgFrame = document.getElementById('img-frame');
 							  const playPauseBtn = document.getElementById('playPauseBtn');
 							  const datasetSelect = document.getElementById('datasetSelect');
+							  const loadingSpinner = document.getElementById('loading-spinner');
 
 							  const preloadedImages = [];
 							  let intervalId = null;
 
 							  function preloadImages() {
 							    const dataset = datasetSelect.value;
-							    preloadedImages.length = 0; // Clear old images
-							    for (let i = 0; i <= parseInt(slider.max); i++) {
-							      const frame = String(i).padStart(3, '0');
-							      const img = new Image();
-							      img.src = `${dataset}_${frame}.webp`; // <- Use .webp
-							      preloadedImages[i] = img;
-							    }
+							    preloadedImages.length = 0;
+							    loadingSpinner.style.display = 'block';
+							    playPauseBtn.disabled = true;
+
+							    const total = parseInt(slider.max);
+							    let loaded = 0;
+
+							    return new Promise((resolve) => {
+							      for (let i = 0; i <= total; i++) {
+							        const frame = String(i).padStart(3, '0');
+							        const img = new Image();
+							        img.onload = () => {
+							          loaded++;
+							          if (loaded > total) {
+							            loadingSpinner.style.display = 'none';
+							            playPauseBtn.disabled = false;
+							            resolve();  // All images loaded
+							          }
+							        };
+							        img.src = `${dataset}_${frame}.webp`;
+							        preloadedImages[i] = img;
+							      }
+							    });
 							  }
 
 							  function updateImage() {
 							    const currentFrame = parseInt(slider.value);
-							    imgFrame.src = preloadedImages[currentFrame].src;
+							    if (preloadedImages[currentFrame]) {
+							      imgFrame.src = preloadedImages[currentFrame].src;
+							    }
 							  }
 
 							  slider.addEventListener('input', () => updateImage());
 
 							  datasetSelect.addEventListener('change', () => {
-							    preloadImages();
-							    updateImage();
+							    preloadImages().then(() => updateImage());
 							  });
 
 							  playPauseBtn.addEventListener('click', () => {
@@ -286,9 +304,8 @@
 							    }
 							  });
 
-							  // Initial load
-							  preloadImages();
-							  updateImage();
+							  // Initial preload
+							  preloadImages().then(() => updateImage());
 							</script>
 
 							<span class="line mb-5"></span>
