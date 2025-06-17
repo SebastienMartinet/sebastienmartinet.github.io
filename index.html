@@ -65,6 +65,7 @@
 	    z-index: 3;
 	}
 	</style>
+
 	<head>
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -135,7 +136,7 @@
 			    nextBg.classList.remove('next');
 			    nextBg.classList.add('current');
 
-			    // Swap the element references for the next cycle
+			    // Swap the element rslider-coneferences for the next cycle
 			    let temp = currentBg;
 			    currentBg = nextBg;
 			    nextBg = temp;
@@ -194,6 +195,23 @@
             </div>
         </div>
     </nav>
+		<style>
+		.about-section {
+			display: flex;
+			flex-wrap: wrap;
+	    align-items: stretch;   /* stretch columns to equal height */
+		}
+
+		.about-card {
+			display: flex;
+			flex-direction: column;
+      justify-content: flex-start;
+		      height: 100%;	}
+
+		.about-card .row {
+			margin-bottom: 1rem;
+		}
+	</style>
     <div class="container-fluid">
         <div id="about" class="row about-section">
 					<div class="col-lg-4 about-card">
@@ -213,92 +231,65 @@
 							  }
 							</style>
 
-							<div id="slider-container">
-							  <select id="datasetSelect">
-							    <option value="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average">Type Ia Supernova (W7)</option>
-							    <option value="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/aa_m25z01s4o17_ta253/Output/m25z01s4o17_average">Type II Supernova (25Msol Z=0.001 V/Vc=0.4)</option>
-							    <!-- <option value="w7_gamma">W7 Gamma</option> -->
-							  </select>
-							  <br>
-							  <img id="img-frame" src="/home/seb/Recherche/Talys/Plots/Lucia/Abundances/ab_w7_m2.0_FeHm0.0_ta235/Output/w7_average_000.png" alt="Frame">
-							  <input type="range" id="slider" min="0" max="400" value="0" step="1">
-							  <br>
-							  <button id="playPauseBtn">Play</button>
-							</div>
-
-							<script>
-							  const slider = document.getElementById('slider');
-							  const imgFrame = document.getElementById('img-frame');
-							  const playPauseBtn = document.getElementById('playPauseBtn');
-							  const datasetSelect = document.getElementById('datasetSelect');
-
-							  let intervalId = null;
-
-							  slider.addEventListener('input', () => updateImage());
-							  datasetSelect.addEventListener('change', () => updateImage());
-
-							  playPauseBtn.addEventListener('click', () => {
-							    if (intervalId === null) {
-							      intervalId = setInterval(() => {
-							        let currentValue = parseInt(slider.value, 10);
-							        if (currentValue >= parseInt(slider.max, 10)) {
-							          slider.value = slider.min;
-							        } else {
-							          slider.value = currentValue + 1;
-							        }
-							        updateImage();
-							      }, 100);
-							      playPauseBtn.textContent = 'Pause';
-							    } else {
-							      clearInterval(intervalId);
-							      intervalId = null;
-							      playPauseBtn.textContent = 'Play';
-							    }
-							  });
-
-							  function updateImage() {
-							    const dataset = datasetSelect.value;
-							    const frameNumber = slider.value.padStart(3, '0');
-							    imgFrame.src = `${dataset}_${frameNumber}.png`;
-							  }
-
-							  updateImage();  // Initialize
-							</script>
 
 							<span class="line mb-5"></span>
 							<div class="row">
-									<div class="col-1 text-danger pt-1"><i class="ti-widget icon-lg"></i></div>
-									<div class="col-10 ml-auto mr-3">
-											<h6>Physics</h6>
-											<p class="subtitle"> Deep knowledge of quantum mechanics, thermodynamics, fluid dynamics, ...</p>
-											<hr>
-									</div>
+							  <div class="col-1 text-danger pt-1"><i class="ti-bar-chart icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Data Analysis & Modeling</h6>
+							    <p class="subtitle">Extensive experience designing and applying models to extract insights from complex, high-dimensional datasets. Proficient in Python, Pandas, NumPy, and Jupyter-based workflows.</p>
+							    <hr>
+							  </div>
 							</div>
+
 							<div class="row">
-									<div class="col-1 text-danger pt-1"><i class="ti-paint-bucket icon-lg"></i></div>
-									<div class="col-10 ml-auto mr-3">
-											<h6>Statistics</h6>
-											<p class="subtitle">7 years of research on large database, using statistical analyzis to unveil uncertainties in our comprehension of the Universe.</p>
-											<hr>
-									</div>
+							  <div class="col-1 text-danger pt-1"><i class="ti-pulse icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Uncertainty Quantification</h6>
+							    <p class="subtitle">Led projects quantifying and propagating uncertainty through simulations and statistical models. Strong background in probabilistic reasoning and sensitivity analysis.</p>
+							    <hr>
+							  </div>
 							</div>
+
 							<div class="row">
-									<div class="col-1 text-danger pt-1"><i class="ti-stats-up icon-lg"></i></div>
-									<div class="col-10 ml-auto mr-3">
-											<h6>Data Exploration</h6>
-											<p class="subtitle">voluptate commodi illo voluptatib.</p>
-											<hr>
-									</div>
+							  <div class="col-1 text-danger pt-1"><i class="ti-layers-alt icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Machine Learning</h6>
+							    <p class="subtitle">Applied supervised learning (e.g., Random Forest, ElasticNet), feature selection (SHAP), and clustering methods to extract key drivers from large scientific datasets.</p>
+							    <hr>
+							  </div>
 							</div>
+
 							<div class="row">
-									<div class="col-1 text-danger pt-1"><i class="ti-stats-up icon-lg"></i></div>
-									<div class="col-10 ml-auto mr-3">
-											<h6>Vizualisation</h6>
-											<p class="subtitle">voluptate commodi illo voluptatib.</p>
-											<hr>
-									</div>
+							  <div class="col-1 text-danger pt-1"><i class="ti-layout-grid2 icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Data Exploration & Visualization</h6>
+							    <p class="subtitle">Built interactive dashboards and custom plots to explore trends and correlations. Skilled with matplotlib, seaborn, Plotly, and d3.js-style interfaces.</p>
+							    <hr>
+							  </div>
+							</div>
+
+							<div class="row">
+							  <div class="col-1 text-danger pt-1"><i class="ti-server icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Working with Large Datasets</h6>
+							    <p class="subtitle">Managed and analyzed datasets with millions of records across multiple sources. Experience with efficient data pipelines, cross-matching, and automation.</p>
+							    <hr>
+							  </div>
+							</div>
+
+							<div class="row">
+							  <div class="col-1 text-danger pt-1"><i class="ti-settings icon-lg"></i></div>
+							  <div class="col-10 ml-auto mr-3">
+							    <h6>Problem Solving & Research</h6>
+							    <p class="subtitle">Strong analytical thinking and independent problem solving. Adaptable, with a proven track record of learning new methods and delivering actionable results in complex settings.</p>
+							    <hr>
+							  </div>
 							</div>
 					</div>
+
+
+
             <div class="col-lg-4 about-card">
 							<h3 class="font-weight-light">About me</h3>
 							<span class="line mb-5"></span>
