@@ -65,7 +65,6 @@
 	    z-index: 3;
 	}
 	</style>
-
 	<head>
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -99,11 +98,9 @@
 	                <h1 class="header-title">Sébastien Martinet</h1>
 	                <h6 class="header-mono">PhD in Astrophysics | Researcher</h6>
 									<!-- <h6 class="header-mono">Expert in statistics and modelling</h6> -->
-									<a href="assets/docs/CV_Martinet.pdf" class="btn btn-primary btn-rounded" target="_blank" download>
-		                <!-- <button class="btn btn-primary btn-rounded"> -->
+	                <button class="btn btn-primary btn-rounded">
 	                    <i class="ti-printer pr-2"></i>Print Resume
-	                <!-- </button> -->
-								</a>
+	                </button>
 	            </div>
 	        </div>
 	    </header>
@@ -138,7 +135,7 @@
 			    nextBg.classList.remove('next');
 			    nextBg.classList.add('current');
 
-			    // Swap the element rslider-coneferences for the next cycle
+			    // Swap the element references for the next cycle
 			    let temp = currentBg;
 			    currentBg = nextBg;
 			    nextBg = temp;
@@ -156,7 +153,7 @@
             <div class="collapse mt-sm-20 navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a href="#home" class="nav-link">Home</a>
+                        <a href="index.html" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item">
                         <a href="#about" class="nav-link">About</a>
@@ -183,7 +180,7 @@
 												<a href="#publications" class="nav-link">Publications</a>
 										</li>
 										<li class="nav-item">
-												<a href="Conferences.html" class="nav-link">Conferences</a>
+												<a href="#container" class="nav-link">Conferences</a>
 										</li>
 										<li class="nav-item">
                         <a href="Research.html" class="nav-link">Research</a>
@@ -197,30 +194,15 @@
             </div>
         </div>
     </nav>
-		<style>
-		.about-section {
-			display: flex;
-			flex-wrap: wrap;
-	    align-items: stretch;   /* stretch columns to equal height */
-		}
-
-		.about-card {
-			display: flex;
-			flex-direction: column;
-      justify-content: flex-start;
-		      height: 100%;	}
-
-		.about-card .row {
-			margin-bottom: 1rem;
-		}
-	</style>
     <div class="container-fluid">
         <div id="about" class="row about-section">
-					<div class="col-lg-4 about-card">
-							<h3 class="font-weight-light">My Expertise</h3>
+					<div class="col-md-4 col-lg-8">
+							<!-- <h3 class="font-weight-light">My Research</h3>
+							<span class="line mb-5"></span> -->
+
 							<style>
 							  #slider-container { text-align: center; }
-							  #slider { width: 80%; margin: 20px; }
+							  #slider { width: 80%; margin: 20px;}
 							  #img-frame {
 							    width: 100%;
 							    height: auto;  /* Maintain aspect ratio */
@@ -228,74 +210,165 @@
 							    margin: auto;
 							  }
 							  button, select {
-							    margin: 5px;
+							    margin: 30px;
 							    padding: 8px 12px;
+							  }
+								input[type="range"] {accent-color: #5693f5; /* blue highlight */}
+
+							</style>
+
+							<div id="slider-container">
+							  <select class="btn btn-primary btn-rounded" id="datasetSelect">
+							    <option value="Frames/ab_w7_m2.0_FeHm0.0_ta235/w7_average">Type Ia Supernova (W7)</option>
+							    <option value="Frames/aa_m25z01s4o17_ta253/m25z01s4o17_average">Type II Supernova (25Msol Z=0.001 V/Vc=0.4)</option>
+							  </select>
+
+							  <!-- Spinner element -->
+							  <div id="loading-spinner" style="display: none;">
+							    <div class="spinner-border" role="status"></div>
+							  </div>
+
+							  <br>
+							  <img id="img-frame" src="Frames/ab_w7_m2.0_FeHm0.0_ta235/w7_average_000.webp" alt="Frame">
+							  <input type="range" id="slider" min="0" max="400" value="0" step="1">
+							  <br>
+							  <button class="btn btn-primary btn-rounded" id="playPauseBtn">Play</button>
+							</div>
+
+							<script>
+							document.addEventListener('DOMContentLoaded', () => {
+							  const slider = document.getElementById('slider');
+							  const imgFrame = document.getElementById('img-frame');
+							  const playPauseBtn = document.getElementById('playPauseBtn');
+							  const datasetSelect = document.getElementById('datasetSelect');
+							  const loadingSpinner = document.getElementById('loading-spinner');
+
+							  const preloadedImages = [];
+							  let intervalId = null;
+
+							  function preloadImages() {
+							    const dataset = datasetSelect.value;
+							    preloadedImages.length = 0;
+							    loadingSpinner.style.display = 'block';
+							    playPauseBtn.disabled = true;
+
+							    const total = parseInt(slider.max);
+							    let loaded = 0;
+
+							    return new Promise((resolve) => {
+							      for (let i = 0; i <= total; i++) {
+							        const frame = String(i).padStart(3, '0');
+							        const img = new Image();
+							        img.onload = () => {
+							          loaded++;
+							          if (loaded >= total + 1) {
+							            loadingSpinner.style.display = 'none';
+							            playPauseBtn.disabled = false;
+							            resolve();  // All images loaded
+							          }
+							        };
+							        img.src = `${dataset}_${frame}.webp`;
+							        preloadedImages[i] = img;
+							      }
+							    });
+							  }
+
+							  function updateImage() {
+							    const currentFrame = parseInt(slider.value);
+							    if (preloadedImages[currentFrame]) {
+							      imgFrame.src = preloadedImages[currentFrame].src;
+							    }
+							  }
+
+							  slider.addEventListener('input', () => updateImage());
+
+							  datasetSelect.addEventListener('change', () => {
+							    preloadImages().then(() => updateImage());
+							  });
+
+							  playPauseBtn.addEventListener('click', () => {
+							    if (intervalId === null) {
+							      intervalId = setInterval(() => {
+							        let currentValue = parseInt(slider.value, 10);
+							        if (currentValue >= parseInt(slider.max, 10)) {
+							          slider.value = slider.min;
+							        } else {
+							          slider.value = currentValue + 1;
+							        }
+							        updateImage();
+							      }, 100);
+							      playPauseBtn.textContent = 'Pause';
+							    } else {
+							      clearInterval(intervalId);
+							      intervalId = null;
+							      playPauseBtn.textContent = 'Play';
+							    }
+							  });
+
+							  // Initial preload
+							  preloadImages().then(() => updateImage());
+							});
+							</script>
+							<style>
+							  #loading-spinner {
+							    text-align: center;
+							    margin-top: 20px;
+							  }
+
+							  .spinner-border {
+							    width: 3rem;
+							    height: 3rem;
+							    border: 0.4em solid #ccc;
+							    border-top: 0.4em solid #5693f5;
+							    border-radius: 50%;
+							    animation: spin 0.8s linear infinite;
+							    margin: auto;
+							  }
+
+							  @keyframes spin {
+							    to { transform: rotate(360deg); }
 							  }
 							</style>
 
 
 							<span class="line mb-5"></span>
 							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-bar-chart icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Data Analysis & Modeling</h6>
-							    <p class="subtitle">Extensive experience designing and applying models to extract insights from complex, high-dimensional datasets. Proficient in Python, Pandas, NumPy, and Jupyter-based workflows.</p>
-							    <hr>
-							  </div>
+									<div class="col-1 text-danger pt-1"><i class="ti-widget icon-lg"></i></div>
+									<div class="col-10 ml-auto mr-3">
+											<h6>Physics</h6>
+											<p class="subtitle"> Deep knowledge of quantum mechanics, thermodynamics, fluid dynamics, ...</p>
+											<hr>
+									</div>
 							</div>
-
 							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-pulse icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Uncertainty Quantification</h6>
-							    <p class="subtitle">Led projects quantifying and propagating uncertainty through simulations and statistical models. Strong background in probabilistic reasoning and sensitivity analysis.</p>
-							    <hr>
-							  </div>
+									<div class="col-1 text-danger pt-1"><i class="ti-paint-bucket icon-lg"></i></div>
+									<div class="col-10 ml-auto mr-3">
+											<h6>Statistics</h6>
+											<p class="subtitle">7 years of research on large database, using statistical analyzis to unveil uncertainties in our comprehension of the Universe.</p>
+											<hr>
+									</div>
 							</div>
-
 							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-layers-alt icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Machine Learning</h6>
-							    <p class="subtitle">Applied supervised learning (e.g., Random Forest, ElasticNet), feature selection (SHAP), and clustering methods to extract key drivers from large scientific datasets.</p>
-							    <hr>
-							  </div>
+									<div class="col-1 text-danger pt-1"><i class="ti-stats-up icon-lg"></i></div>
+									<div class="col-10 ml-auto mr-3">
+											<h6>Data Exploration</h6>
+											<p class="subtitle">voluptate commodi illo voluptatib.</p>
+											<hr>
+									</div>
 							</div>
-
 							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-layout-grid2 icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Data Exploration & Visualization</h6>
-							    <p class="subtitle">Built interactive dashboards and custom plots to explore trends and correlations. Skilled with matplotlib, seaborn, Plotly, and d3.js-style interfaces.</p>
-							    <hr>
-							  </div>
-							</div>
-
-							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-server icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Working with Large Datasets</h6>
-							    <p class="subtitle">Managed and analyzed datasets with millions of records across multiple sources. Experience with efficient data pipelines, cross-matching, and automation.</p>
-							    <hr>
-							  </div>
-							</div>
-
-							<div class="row">
-							  <div class="col-1 text-danger pt-1"><i class="ti-settings icon-lg"></i></div>
-							  <div class="col-10 ml-auto mr-3">
-							    <h6>Problem Solving & Research</h6>
-							    <p class="subtitle">Strong analytical thinking and independent problem solving. Adaptable, with a proven track record of learning new methods and delivering actionable results in complex settings.</p>
-							    <hr>
-							  </div>
+									<div class="col-1 text-danger pt-1"><i class="ti-stats-up icon-lg"></i></div>
+									<div class="col-10 ml-auto mr-3">
+											<h6>Vizualisation</h6>
+											<p class="subtitle">voluptate commodi illo voluptatib.</p>
+											<hr>
+									</div>
 							</div>
 					</div>
-
-
-
             <div class="col-lg-4 about-card">
-							<h3 class="font-weight-light">About me</h3>
+							<h3 class="font-weight-light">Supernovae Explosions:</h3>
 							<span class="line mb-5"></span>
-							<h5 class="mb-3">PhD in Astrophysics and specialist in Nuclear Astrophysics searching for new challenges</h5>
+							<h5 class="mb-3">Dertimining conisistently nuclear uncertainties in large scale nucleosynthesis simulations</h5>
 							<p class="mt-20"></p>
 							<p class="lead">
 									I am a <strong>postdoctoral researcher in astrophysics and nuclear physics</strong> with a strong background in computational modeling, data analysis, and statistical methods. Throughout my career, I have tackled complex problems by leveraging high-performance computing, machine learning techniques, and large-scale data processing.
@@ -306,9 +379,7 @@
 							<p>
 									Beyond technical expertise, I excel in <strong>problem-solving, interdisciplinary collaboration, and scientific communication</strong>. Whether optimizing models for astrophysical simulations or extracting meaningful insights from large datasets, I am passionate about transforming data into actionable knowledge. Now, I am looking to transition into <strong>data science</strong> to apply my analytical skills in new and impactful ways.
 							</p>
-							<a href="assets/docs/CV_Martinet.pdf" class="btn btn-primary btn-rounded" target="_blank" download>
-								<i class="icon-down-circled2 "></i>Download My CV
-							</a>
+							<button class="btn btn-outline-danger"><i class="icon-down-circled2 "></i>Download My CV</button>
 							<h3></h3>
             </div>
 						<div class="col-lg-4 about-card">
@@ -341,9 +412,7 @@
 		        <div class="container text-center">
 		            <h2 class="text-light mb-5 font-weight-normal">Expert in physics, statistics, data analysis, software development and vizualisation </h2>
 		            <!-- <button class="btn bg-primary w-lg" ></button> -->
-								<a href="mailto:sebastien_martinet@ymail.com" class="btn btn-primary btn-rounded">
-									<i class="icon-down-circled2 "></i>Open For Work
-								</a>
+								<button class="btn btn-outline-danger"><i class="icon-down-circled2 "></i>Open For Work</button>
 
 		        </div>
 		    </section>
@@ -461,10 +530,6 @@
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <h6>Spanish</h6>
-                            <div class="progress mb-3">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 70%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-														<h6>Italian</h6>
                             <div class="progress mb-3">
                                 <div class="progress-bar bg-danger" role="progressbar" style="width: 70%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -598,21 +663,20 @@
 						  <span class="badge badge-secondary filter-btn active" data-filter="all">Show All</span>
 						  <span class="badge badge-danger filter-btn" data-filter="high-performance">High-Performance Computing</span>
 						  <span class="badge badge-danger filter-btn" data-filter="large-scale-data">Large-Scale Data Analysis</span>
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="algorithm-development">Algorithm Development</span> -->
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="statistical-evaluation">Statistical Evaluation</span> -->
+						  <span class="badge badge-danger filter-btn" data-filter="algorithm-development">Algorithm Development</span>
+						  <span class="badge badge-danger filter-btn" data-filter="statistical-evaluation">Statistical Evaluation</span>
 						  <span class="badge badge-danger filter-btn" data-filter="interdisciplinary-collaboration">Interdisciplinary Collaboration</span>
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="data-integration">Data Integration</span> -->
+						  <span class="badge badge-danger filter-btn" data-filter="data-integration">Data Integration</span>
 						  <span class="badge badge-danger filter-btn" data-filter="numerical-simulation">Numerical Simulation</span>
 						  <span class="badge badge-danger filter-btn" data-filter="software-development">Software Development</span>
 						  <span class="badge badge-danger filter-btn" data-filter="quantitative-analysis">Quantitative Analysis</span>
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="team-collaboration">Team Collaboration</span> -->
+						  <span class="badge badge-danger filter-btn" data-filter="team-collaboration">Team Collaboration</span>
 						  <span class="badge badge-danger filter-btn" data-filter="experimental-design">Experimental Design</span>
-							<span class="badge badge-danger filter-btn" data-filter="database">Database</span>
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="quantitative-modeling">Quantitative Modeling</span>
-						  <span class="badge badge-danger filter-btn" data-filter="algorithm-implementation">Algorithm Implementation</span> -->
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="model-refinement">Model Refinement</span> -->
-						  <!-- <span class="badge badge-danger filter-btn" data-filter="computational-modeling">Computational Modeling</span>
-						  <span class="badge badge-danger filter-btn" data-filter="problem-solving">Problem Solving</span> -->
+						  <span class="badge badge-danger filter-btn" data-filter="quantitative-modeling">Quantitative Modeling</span>
+						  <span class="badge badge-danger filter-btn" data-filter="algorithm-implementation">Algorithm Implementation</span>
+						  <span class="badge badge-danger filter-btn" data-filter="model-refinement">Model Refinement</span>
+						  <span class="badge badge-danger filter-btn" data-filter="computational-modeling">Computational Modeling</span>
+						  <span class="badge badge-danger filter-btn" data-filter="problem-solving">Problem Solving</span>
 						</div>
 
 						<script>
@@ -657,7 +721,7 @@
 				      </div>
 
 				      <!-- Paper 2 -->
-				      <div class="col-md-6 col-lg-4 publication-item high-performance large-scale-data">
+				      <div class="col-md-6 col-lg-4 publication-item algorithm-development statistical-evaluation">
 				        <div class="card mb-4">
 				          <div class="card-body">
 				            <h5 class="card-title">The intermediate neutron capture process. IV. Impact of nuclear model and parameter uncertainties</h5>
@@ -665,8 +729,8 @@
 				              <em>Astronomy &amp; Astrophysics, Vol. 684, A8 – <span class="publication-year badge badge-primary">2024</span></em>
 				            </p>
 				            <div class="publication-keywords mb-2">
-				              <span class="badge badge-danger">High‑Performance Computing</span>
-				              <span class="badge badge-danger">Large‑Scale Data Analysis</span>
+				              <span class="badge badge-danger">Algorithm Development</span>
+				              <span class="badge badge-danger">Statistical Evaluation</span>
 				            </div>
 				            <p class="publication-summary">
 				              Optimized computational models to assess nuclear reaction parameter uncertainties.
@@ -685,8 +749,8 @@
 				              <em>IAU Symposium, pp. 369‑375 – <span class="publication-year badge badge-primary">2024</span></em>
 				            </p>
 				            <div class="publication-keywords mb-2">
-				              <span class="badge badge-danger">Numerical Simulation</span>
-				              <!-- <span class="badge badge-danger">Data Integration</span> -->
+				              <span class="badge badge-danger">Interdisciplinary Collaboration</span>
+				              <span class="badge badge-danger">Data Integration</span>
 				            </div>
 				            <p class="publication-summary">
 				              Integrated theoretical models with observational data to study massive star evolution.
@@ -697,15 +761,14 @@
 				      </div>
 
 				      <!-- Paper 4 -->
-				      <div class="col-md-6 col-lg-4 publication-item database numerical-simulation">
+				      <div class="col-md-6 col-lg-4 publication-item data-integration algorithm-implementation">
 				        <div class="card mb-4">
 				          <div class="card-body">
 				            <h5 class="card-title">VizieR Online Data Catalog: Very massive star models (VMS)</h5>
 				            <p class="card-text"><em>Dataset – <span class="publication-year badge badge-primary">2023</span></em></p>
 				            <div class="publication-keywords mb-2">
-				              <span class="badge badge-danger">Numerical Simulation</span>
-											<span class="badge badge-danger">Database</span>
-				              <!-- <span class="badge badge-danger">Algorithm Implementation</span> -->
+				              <span class="badge badge-danger">Data Integration</span>
+				              <span class="badge badge-danger">Algorithm Implementation</span>
 				            </div>
 				            <p class="publication-summary">
 				              Published a comprehensive catalog of very massive star models for public access.
@@ -716,15 +779,13 @@
 				      </div>
 
 				      <!-- Paper 5 (Added keyword and badge) -->
-				      <div class="col-md-6 col-lg-4 publication-item numerical-simulation quantitative-analysis">
+				      <div class="col-md-6 col-lg-4 publication-item quantitative-analysis">
 				        <div class="card mb-4">
 				          <div class="card-body">
 				            <h5 class="card-title">Very massive star models. I. Impact of rotation and metallicity and comparisons with observations</h5>
 				            <p class="card-text"><em>Astronomy &amp; Astrophysics – <span class="publication-year badge badge-primary">2023</span></em></p>
 				            <div class="publication-keywords mb-2">
-											<span class="badge badge-danger">Numerical Simulation</span>
-     									<span class="badge badge-danger">Quantitative Analysis</span>
-											<span class="badge badge-danger">Software Development</span>
+				              <span class="badge badge-danger">Quantitative Analysis</span>
 				            </div>
 				            <p class="publication-summary">
 				              Investigated the effects of rotation and metallicity on very massive star evolution.
@@ -735,15 +796,13 @@
 				      </div>
 
 				      <!-- Paper 6 (Added keyword and badge) -->
-				      <div class="col-md-6 col-lg-4 publication-item numerical-simulation quantitative-analysis">
+				      <div class="col-md-6 col-lg-4 publication-item numerical-simulation">
 				        <div class="card mb-4">
 				          <div class="card-body">
 				            <h5 class="card-title">Convective core sizes in rotating massive stars. I. Constraints from solar metallicity OB field stars</h5>
 				            <p class="card-text"><em>Astronomy &amp; Astrophysics – <span class="publication-year badge badge-primary">2021</span></em></p>
 				            <div class="publication-keywords mb-2">
 				              <span class="badge badge-danger">Numerical Simulation</span>
-											<span class="badge badge-danger">Quantitative Analysis</span>
-
 				            </div>
 				            <p class="publication-summary">
 				              Analyzed convective core sizes in massive stars using updated simulation techniques.
@@ -754,14 +813,14 @@
 				      </div>
 
 				      <!-- Paper 7 -->
-				      <div class="col-md-6 col-lg-4 publication-item quantitative-analysis">
+				      <div class="col-md-6 col-lg-4 publication-item problem-solving algorithm-development">
 				        <div class="card mb-4">
 				          <div class="card-body">
 				            <h5 class="card-title">Hyperfine Structure and Abundances of Heavy Elements in 68 Tauri (HD 27962)</h5>
 				            <p class="card-text"><em>SF2A-2017 Conference – <span class="publication-year badge badge-primary">2017</span></em></p>
 				            <div class="publication-keywords mb-2">
-											<span class="badge badge-danger">Quantitative Analysis</span>
-				              <!-- <span class="badge badge-danger">Algorithm Development</span> -->
+				              <span class="badge badge-danger">Problem Solving</span>
+				              <span class="badge badge-danger">Algorithm Development</span>
 				            </div>
 				            <p class="publication-summary">
 				              Analyzed the hyperfine structure and abundances of heavy elements in the star 68 Tauri.
@@ -1371,6 +1430,77 @@
         </div>
     </section> -->
 
+    <div class="section contact" id="contact">
+        <div id="map" class="map"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="contact-form-card">
+                        <h4 class="contact-title">Send a message</h4>
+                        <form action="">
+                            <div class="form-group">
+                                <input  class="form-control" type="text" placeholder="Name *" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="email" placeholder="Email *" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" id=" placeholder="Message *" rows="7" required></textarea>
+                            </div>
+                            <div class="form-group ">
+                                <button type="submit" class="form-control btn btn-primary" >Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="contact-info-card">
+                        <h4 class="contact-title">Get in touch</h4>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-mobile icon-md"></i>
+                            </div>
+                            <div class="col-10 ">
+                                <h6 class="d-inline">Phone : <br> <span class="text-muted">+ (123) 456-789</span></h6>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-map-alt icon-md"></i>
+                            </div>
+                            <div class="col-10">
+                                <h6 class="d-inline">Address :<br> <span class="text-muted">12345 Fake ST NoWhere AB Country.</span></h6>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-1 pt-1 mr-1">
+                                <i class="ti-envelope icon-md"></i>
+                            </div>
+                            <div class="col-10">
+                                <h6 class="d-inline">Email :<br> <span class="text-muted">info@website.com</span></h6>
+                            </div>
+                        </div>
+                        <ul class="social-icons pt-4">
+                            <!-- <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-facebook" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-twitter" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-google" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-instagram" aria-hidden="true"></i></a></li>
+                            <li class="social-item"><a class="social-link text-dark" href="#"><i class="ti-github" aria-hidden="true"></i></a></li> -->
+														<li class="social-item"><a class="social-link" href="https://www.linkedin.com/in/s%C3%A9bastien-martinet/"><i class="ti-linkedin" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="footer py-3">
+        <div class="container">
+            <p class="small mb-0 text-light">
+                &copy; <script>document.write(new Date().getFullYear())</script> Created With <i class="ti-heart text-danger"></i> By <a href="http://devcrud.com" target="_blank"><span class="text-danger" title="Bootstrap 4 Themes and Dashboards">DevCRUD</span></a>
+            </p>
+        </div>
+    </footer>
 
 	<!-- core  -->
     <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
@@ -1577,7 +1707,6 @@
 		    // Conference data
 		    var conferences = [
 				{ lat: 42.7525499,lng: 13.9623706, title: "s, i & r Element Nucleosynthesis (sirEN) Conference", date: "June 2025", country: "Italy", contribution: "Selected-talk on Statistical framework for nuclear parameter uncertainties in nucleosynthesis modeling of r- and i-process", type: "selected" },
-				{ lat: 47.4670, lng: 18.90010, title: "8th p-process workshop 2024", date: "Oct 2024", country: "Hungary", contribution: "Selected-talk on p-process nuclear uncertainties", type: "selected" },
 				{ lat: 50.1109, lng: 8.6821, title: "Nuclear Physics in Astrophysics XI", date: "Sept 2024", country: "Germany", contribution: "Invited-talk on r-process", type: "invited" },
 				{ lat: 41.89193, lng: 12.51133, title: "XIV Torino Workshop on AGB stars", date: "June 2024", country: "Italy", contribution: "Selected-talk on i-process", type: "selected" },
 				{ lat: 48.8566, lng: 2.3522, title: "4th ChETEC-INFRA General Assembly", date: "May 2024", country: "France", contribution: "Invited-talk on r-process", type: "invited" },
@@ -1666,12 +1795,12 @@
 		<!-- </body>
 		</html> -->
 		<!-- Collaboration Map Section -->
-		<!-- <section id="collaboration-map" class="section">
+		<section id="collaboration-map" class="section">
 		  <div class="container">
 		    <h2 class="mb-5"><span class="text-danger">Collaboration</span> Map</h2>
 		    <div id="collab-map" style="height: 500px; width: 100%;"></div>
 		  </div>
-		</section> -->
+		</section>
 
 <script src="https://unpkg.com/leaflet-curve"></script>
 		<script>
