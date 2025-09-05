@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My PDF Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .pdf-container {
+            width: 80%;
+            height: 80vh;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Check out this document!</h1>
+
+    <div class="pdf-container">
+        <iframe src="path/to/your-document.pdf" title="Embedded PDF Document">
+            <p>Your browser doesn't support embedded PDFs. You can <a href="path/to/your-document.pdf">download the PDF</a> instead.</p>
+        </iframe>
+    </div>
+
+</body>
+</html>
