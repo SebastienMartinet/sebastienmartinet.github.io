@@ -387,6 +387,11 @@ function fmtMaybe(v, digits=2) {
 function fmtPct(v) {
   return (v === null || v === undefined || Number.isNaN(v)) ? '—' : `${Number(v).toFixed(1)}%`;
 }
+function fmtSci(v, digits=3) {
+  return (v === null || v === undefined || Number.isNaN(v))
+    ? '—'
+    : Number(v).toExponential(digits);
+}
 function activeSites() {
   return DATA.sites.filter(s => document.getElementById(`site_${s}`).checked);
 }
@@ -805,7 +810,7 @@ function drawRateUncertaintyOverlay() {
       showTooltip(ev,
         `<b>${r.kindLabel} uncertainty</b><br>${r.label}<br>N=${r.N}, Z=${r.Z}<br>` +
         `ratio max/min: ${fmtMaybe(r.ratio,2)}<br>` +
-        `min: ${fmtMaybe(r.Rate_min,3)}<br>max: ${fmtMaybe(r.Rate_max,3)}`
+        `min: ${fmtSci(r.Rate_min,3)}<br>max: ${fmtSci(r.Rate_max,3)}` 
       );
     });
     rect.addEventListener('mouseleave', hideTooltip);
